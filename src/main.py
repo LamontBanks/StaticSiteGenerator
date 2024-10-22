@@ -34,7 +34,7 @@ def main():
                                        children=[
                                            LeafNode(tag="a", props={"href": "http://www.example.com", "target": "_blank"},
                                                     value="My link"),
-                                           LeafNode(value="Grocery List"),
+                                           LeafNode(value="ISO Grocery List"),
                                            ParentNode(tag="ul",
                                                       children=[
                                                           LeafNode(tag="li", value="French Bread"),
