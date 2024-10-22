@@ -15,7 +15,7 @@ class LeafNode(HTMLNode):
 
     def __init__(self, value, tag=None, props=None):
         if (value == None):
-            raise ValueError
+            raise ValueError(f"LeafNode's value parameter = {value}. LeafNode *must* have a value set")
 
         super().__init__(tag=tag, value=value, props=props)
 
@@ -39,7 +39,7 @@ class LeafNode(HTMLNode):
     '''
     def to_html(self):
         if (self.value == None):
-            raise ValueError
+            raise ValueError(f"LeafNode's value parameter = {self.value}. LeafNode *must* have a value set")
 
         if (self.tag == None):
             return self.value

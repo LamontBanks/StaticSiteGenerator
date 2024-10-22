@@ -1,19 +1,65 @@
 from textnode import *
 from htmlnode import *
+from parentnode import *
 from leafnode import *
 
 def main():
-    dummy_text_node = TextNode("this is my name", "italic", "https://www.boot.dev")
-    print(dummy_text_node)
 
-    dummy_html_node = HTMLNode(tag="p", value="text inside a paragraph element", props = { "href": "https://www.google.com" })
-    dummy_html_node2 = HTMLNode(tag="p", value="2 text", props = { "href": "https://www.google.com" })
-    dummy_html_node3 = HTMLNode(tag="p", value="3 text", props = { "href": "https://www.google.com" }, children = [dummy_html_node, dummy_html_node2])
-    print(dummy_html_node)
-    print(dummy_html_node2)
-    print(dummy_html_node3)
+    '''
+    Sample transformation
 
-    dummy_leaf_node = LeafNode("yes this is patrick", tag="p", props = { "href": "https://www.google.com", "target": "_blank" })
-    print(dummy_leaf_node)
-    print(dummy_leaf_node.to_html())
+    <div>
+        <b>Bold text</b>
+        <p style="margin: 15px; line-height: 1.5; text-align: center">
+            Normal text
+        </p>
+        <div>
+            <a href="http://www.example.com" target="_blank">My link</a>
+            ISO Grocery List
+            <ul>
+                <li>French Bread</li>
+                <li><b>Celery</b></li>
+                <li>Milk</li>
+            </ul>
+            Remember, no <i><b>branded</b></i> products!
+        </div>
+    </div>
+    '''
+    node_1 = ParentNode(tag="div",
+                        children=[
+                            LeafNode(tag="b", value="Bold text"),
+                            LeafNode(tag="p", props={ "style": "margin: 15px; line-height: 1.5; text-align: center"}, 
+                                     value="Normal text"),
+                            ParentNode(tag="div", 
+                                       children=[
+                                           LeafNode(tag="a", props={"href": "http://www.example.com", "target": "_blank"},
+                                                    value="My link"),
+                                           LeafNode(value="Grocery List"),
+                                           ParentNode(tag="ul",
+                                                      children=[
+                                                          LeafNode(tag="li", value="French Bread"),
+                                                          ParentNode(tag="li",
+                                                                     children=[
+                                                                         LeafNode(tag="b", value="Celery")
+                                                                     ]),
+                                                          LeafNode(tag="li", value="Milk"),
+                                                      ]),
+                                            LeafNode(value="Remember, no "),
+                                            ParentNode(tag="i",
+                                                       children=[
+                                                           ParentNode(tag="b",
+                                                                      children=[
+                                                                          LeafNode(value="branded")
+                                                                      ])
+                                                       ]),
+                                            LeafNode(value=" products!")
+                                        ]
+                                    )
+                                ]
+                            )
+
+    # <div><b>Bold text</b><p style="margin: 15px; line-height: 1.5; text-align: center">Normal text</p><div><a href="http://www.example.com" target="_blank">My link</a>Grocery List<ul><li>French Bread</li><li><b>Celery</b></li><li>Milk</li></ul>Remember, no <i><b>branded</b></i> products!</div></div>
+    print(node_1.to_html())
+
+
 main()
