@@ -24,8 +24,11 @@ def text_node_to_html_node(text_node):
         case TextType.CODE:
             return LeafNode(tag="code", value=text_node.text)
         case TextType.LINK:
-            return LeafNode(tag="a", value=text_node.text, props={ "href": text_node.url })
-        case TextType.LINK:
-            return LeafNode(tag="img", props={ "src": text_node.url, "alt": text_node.text })
+            href = text_node.url if text_node.url is not None else ""
+            return LeafNode(tag="a", value=text_node.text, props={ "href": href })
+        case TextType.IMAGE:
+            src = text_node.url if text_node.url is not None else ""
+            alt = text_node.text if text_node.text is not None else ""
+            return LeafNode(tag="img", value="", props={ "src": src, "alt": alt })
         case _:
             raise Exception(f"Not a valid TextType: {text_node.text_type}")
