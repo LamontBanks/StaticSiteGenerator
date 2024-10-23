@@ -1,31 +1,36 @@
-from textnode import *
-from htmlnode import *
-from parentnode import *
-from leafnode import *
+import unittest
 
-def main():
+from parentnode import ParentNode
+from leafnode import LeafNode
 
-    '''
-    Sample ouutput of Node to nested HTML
+class TestParentNode(unittest.TestCase):
 
-    <div>
-        <b>Bold text</b>
-        <p style="margin: 15px; line-height: 1.5; text-align: center">
-            Normal text
-        </p>
+    # ParentNode with mixed LeafNodes (tag, no tag, props, no props), nested ParentNodes
+    def test_parent_node_full(self):
+        # Remove char limit in diff shown failed assertions
+        self.maxDiff = None
+
+        '''
+        Original HTML:
+
         <div>
-            <a href="http://www.example.com" target="_blank">My link</a>
-            ISO Grocery List
-            <ul>
-                <li>French Bread</li>
-                <li><b>Celery</b></li>
-                <li>Milk</li>
-            </ul>
-            Remember, no <i><b>branded</b></i> products!
+            <b>Bold text</b>
+            <p style="margin: 15px; line-height: 1.5; text-align: center">
+                Normal text
+            </p>
+            <div>
+                <a href="http://www.example.com" target="_blank">My link</a>
+                ISO Grocery List
+                <ul>
+                    <li>French Bread</li>
+                    <li><b>Celery</b></li>
+                    <li>Milk</li>
+                </ul>
+                Remember, no <i><b>branded</b></i> products!
+            </div>
         </div>
-    </div>
-    '''
-    node_1 = ParentNode(tag="div",
+        '''
+        node = ParentNode(tag="div",
                         children=[
                             LeafNode(tag="b", value="Bold text"),
                             LeafNode(tag="p", props={ "style": "margin: 15px; line-height: 1.5; text-align: center"}, 
@@ -57,9 +62,18 @@ def main():
                                     )
                                 ]
                             )
+        
+        self.assertEqual(node.to_html(), '<div><b>Bold text</b><p style="margin: 15px; line-height: 1.5; text-align: center">Normal text</p><div><a href="http://www.example.com" target="_blank">My link</a>ISO Grocery List<ul><li>French Bread</li><li><b>Celery</b></li><li>Milk</li></ul>Remember, no <i><b>branded</b></i> products!</div></div>')
 
-    # <div><b>Bold text</b><p style="margin: 15px; line-height: 1.5; text-align: center">Normal text</p><div><a href="http://www.example.com" target="_blank">My link</a>ISO Grocery List<ul><li>French Bread</li><li><b>Celery</b></li><li>Milk</li></ul>Remember, no <i><b>branded</b></i> products!</div></div>
-    print(node_1.to_html())
+    # ParentNode - Empty children ("no" children)
+
+    # Nest ParentNodes - 3 levels
+
+    # ParentNode + 1 leafnode
+    # ParentNode + 3 leafnodes
+
+    # Multiple same-level ParentNodes
+
+    # Error: ParentNode with None children
 
 
-main()
