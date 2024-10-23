@@ -41,4 +41,6 @@ class TestLeafNode(unittest.TestCase):
     def test_to_html_no_tag_and_value_is_empty_string(self):
         leaf_node = LeafNode("")
         self.assertEqual(leaf_node.to_html(), "")
-    
+
+if __name__ == "__main__":
+    unittest.main()

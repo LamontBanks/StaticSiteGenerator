@@ -16,34 +16,34 @@ class TestTextNode(unittest.TestCase):
 
         self.assertNotEqual(node, node2)
 
-    def test_diff_text_type_not_eq(self):
-        node = TextNode("This a text node", TextType.TEXT)
-        node2 = TextNode("This a text node", TextType.HTML)
+    def test_same_text_diff_text_type_not_eq(self):
+        node = TextNode("abc", TextType.TEXT)
+        node2 = TextNode("abc", TextType.LINK)
 
         self.assertNotEqual(node, node2)
 
     def test_diff_url_not_eq(self):
-        node = TextNode("This a text node", TextType.TEXT, "www.abc.com")
-        node2 = TextNode("This a text node", TextType.TEXT, "www.xyz.com")
+        node = TextNode("This a link", TextType.LINK, "www.abc.com")
+        node2 = TextNode("This a link", TextType.LINK, "www.xyz.com")
 
         self.assertNotEqual(node, node2)
 
     def test_repr(self):
-        text = "This a text node"
-        text_type = TextType.TEXT
+        text = "This is a link"
+        text_type = TextType.LINK
         url = "http://www.example.com"
 
-        node = TextNode(text, TextType.TEXT, url)
+        node = TextNode(text, TextType.LINK, url)
         self.assertEqual(node.__repr__(), f"TextNode({text}, {text_type}, {url})")
 
-    def test_repr_no_url(self):
+    def test_repr_no_url_set(self):
         text = "This a text node"
         text_type = TextType.TEXT
 
         node = TextNode(text, TextType.TEXT)
         self.assertEqual(node.__repr__(), f"TextNode({text}, {text_type}, None)")
     
-    def test_repr_empty_values(self):
+    def test_repr_empty_strings(self):
         text = ""
         text_type = ""
 
