@@ -48,9 +48,8 @@ class HTMLNode():
         return html_props
     
     def __repr__(self):
-        tag_str = f"Tag: {self.tag}"
-        value_str = f"Value: {str(self.value)}"
-        props_str = f"Properties: {self.props}"
-        children_str = f"Children: {self.children}"
-        
-        return f"HTMLNode({tag_str}, {value_str}, {props_str}, {children_str})"
+        return f"HTMLNode(Tag: {self.tag}, Value: {str(self.value)}, Properties: {self.props}, Children: {self.children})"
+    
+
+    def __eq__(self, other):
+        return (self.tag == other.tag) and (self.value == other.value) and (self.props == other.props) and (self.children == other.children)
