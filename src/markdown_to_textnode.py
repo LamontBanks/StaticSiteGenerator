@@ -50,8 +50,10 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
                 raise Exception(f"Mismatched [{delimiter}] delimiter:\n{full_text}")
             
             # If length = 1, there *are no* delimiters => just add the existing node to the list
+            # (if it's not an empty string)
             if split_text_len == 1:
-                new_nodes.append(old_node)
+                if old_node.text != "":
+                    new_nodes.append(old_node)
                 continue
 
             # Add EVEN indices as TextType.TEXT, ODD indices as the given text_type
