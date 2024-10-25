@@ -8,6 +8,14 @@ class TextType(Enum):
     LINK = "link"
     IMAGE = "image"
 
+class DelimiterType(Enum):
+    TEXT = " "
+    ITALIC = '*'
+    BOLD = '**'
+    CODE = '`'
+    LINK = ""   # TODO      [custom text](www.example.com)
+    IMAGE = ""  # TODO      [alt text](/src/images/image.png)
+
 class TextNode():
 
     def __init__(self, text, text_type, url = None):
