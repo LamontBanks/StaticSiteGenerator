@@ -7,7 +7,6 @@ class TestMarkdownToTextNode(unittest.TestCase):
         nodes = [
             TextNode(text="This is text with a `code` word", text_type=TextType.TEXT)
         ]
-
         expected_nodes = [
             TextNode(text="This is text with a ", text_type=TextType.TEXT),
             TextNode(text="code", text_type=TextType.CODE),
@@ -24,7 +23,6 @@ class TestMarkdownToTextNode(unittest.TestCase):
             TextNode(text="I guess we're doing plain `text` now?", text_type=TextType.TEXT),
             TextNode(text="Nope, full code. Welcome back.", text_type=TextType.CODE)
         ]
-
         expected_nodes = [
             TextNode(text="This is text with a ", text_type=TextType.TEXT),
             TextNode(text="code", text_type=TextType.CODE),
@@ -39,17 +37,59 @@ class TestMarkdownToTextNode(unittest.TestCase):
         self.assertEqual(split_nodes_delimiter(nodes, DelimiterType.CODE.value, TextType.CODE), 
                          expected_nodes)
     
-    # # "`code`"
-    # def test_single_word(self):
-    #     raise NotImplementedError
+    def test_single_word(self):
+        nodes = [
+            TextNode(text="`print(\"hello world\")`", text_type=TextType.TEXT)
+        ]
+        expected_nodes = [
+            TextNode(text="print(\"hello world\")", text_type=TextType.CODE)
+        ]
 
-    # # "`code` `code` `code`"
-    # def test_multiple_words(self):
-    #     raise NotImplementedError
+        self.assertEqual(split_nodes_delimiter(nodes, DelimiterType.CODE.value, TextType.CODE), 
+                         expected_nodes)
 
-    # # "`code`plain`code` plain `code``code  ` `` plain `` plain `` ``"
-    # def test_mixed_words(self):
-    #     raise NotImplementedError
+    def test_multiple_words(self):
+        nodes = [
+            TextNode(text="Green functions: `.reduce()`, `.reuse()`, and `.recycle()`.", text_type=TextType.TEXT),
+        ]
+
+        expected_nodes = [
+            TextNode(text="Green functions: ", text_type=TextType.TEXT),
+            TextNode(text=".reduce()", text_type=TextType.CODE),
+            TextNode(text=", ", text_type=TextType.TEXT),
+            TextNode(text=".reuse()", text_type=TextType.CODE),
+            TextNode(text=", and ", text_type=TextType.TEXT),
+            TextNode(text=".recycle()", text_type=TextType.CODE),
+            TextNode(text=".", text_type=TextType.TEXT),
+        ]
+
+        self.assertEqual(split_nodes_delimiter(nodes, DelimiterType.CODE.value, TextType.CODE), 
+                         expected_nodes)
+
+    def test_mixed_words(self):
+        # Delimited, empty strings will not generate nodes
+        nodes = [
+            TextNode(text="`code1`plain1`code2` plain2 `code3``code4  ` `` plain3 `` plain4 `` ``", text_type=TextType.TEXT),
+        ]
+
+        expected_nodes = [
+            TextNode(text="code1", text_type=TextType.CODE),
+            TextNode(text="plain1", text_type=TextType.TEXT),
+            TextNode(text="code2", text_type=TextType.CODE),
+            TextNode(text=" plain2 ", text_type=TextType.TEXT),
+            TextNode(text="code3", text_type=TextType.CODE),
+            TextNode(text="code4  ", text_type=TextType.CODE),
+            TextNode(text=" ", text_type=TextType.TEXT),
+            TextNode(text=" plain3 ", text_type=TextType.TEXT),
+            TextNode(text=" plain4 ", text_type=TextType.TEXT),
+            TextNode(text=" ", text_type=TextType.TEXT)
+        ]
+
+        self.assertEqual(split_nodes_delimiter(nodes, DelimiterType.CODE.value, TextType.CODE), 
+                         expected_nodes)
+
+
+
     # # ""
     # def test_empty_string(self):
     #     raise NotImplementedError
