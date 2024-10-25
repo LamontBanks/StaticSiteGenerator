@@ -66,10 +66,9 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
 
     return new_nodes
 
+# Print original, combined string for error messages
 def nodes_combined_text(nodes):
     full_text = ""
-
     for node in nodes:
         full_text += node.text
-    
     return full_text
