@@ -28,3 +28,6 @@ class TestTextNode(unittest.TestCase):
         text_node = TextNode("image alt text", TextType.IMAGE)
         expected_repr = "TextNode(image alt text, image, None)"
         self.assertEqual(text_node.__repr__(), expected_repr)
+
+if __name__ == "__main__":
+    unittest.main()
