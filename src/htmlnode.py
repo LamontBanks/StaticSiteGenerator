@@ -1,6 +1,15 @@
+from enum import Enum
+
+class HTMLTag(Enum):
+    TEXT = None
+    BOLD = "b"
+    ITALIC = "i"
+    CODE = "code"
+    LINK = "a"
+    IMAGE = "img"
+
 """
 Represents a node in an HTML document
-This class is intended to be inherited
 
 Ex: <p>, <div>, <h1>, <ul><li><li>...</ul>, <img alt="" src="">, etc.
 """
@@ -43,4 +52,7 @@ class HTMLNode():
         return props_str
     
     def __repr__(self):
-        return f"HTMLNode(tag={self.tag}, value={self.value}, children={self.children}, props={self.props})" 
+        return f"HTMLNode(tag={self.tag}, value={self.value}, children={self.children}, props={self.props})"
+
+    def __eq__(self, other):
+         return (self.tag == other.tag) and (self.value == other.value) and (self.children == other.children) and (self.props == other.props)
