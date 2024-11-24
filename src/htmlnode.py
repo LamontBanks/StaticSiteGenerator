@@ -40,8 +40,7 @@ class HTMLNode():
             # https://www.w3schools.com/html/html_attributes.asp
             props_str += f" {prop}=\"{value}\""
 
-        # Remove leading space
-        return props_str.lstrip()
+        return props_str
     
     def __repr__(self):
         return f"HTMLNode(tag={self.tag}, value={self.value}, children={self.children}, props={self.props})" 
