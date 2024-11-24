@@ -14,9 +14,9 @@ class TextType(Enum):
 class TextNode():
 
     """
-    @param text - Text content of the node
-    @param text_type - TextType enum
-    @param URL of the link or image. Defaults to None.
+    param `text` - Text content of the node
+    param `text_type` - `TextType` enum
+    param `url` - of the link or image, defaults to `None`.
     """
     def __init__(self, text, text_type, url=None):
         self.text = text
@@ -29,4 +29,4 @@ class TextNode():
     
 
     def __repr__(self):
-        return f"TextNode({self.text}, {self.text_type.value}, {self.url})"
+        return f"TextNode(text={self.text}, text_type={self.text_type.value}, url={self.url})"
