@@ -20,15 +20,9 @@ class TestHTMLNode(unittest.TestCase):
         self.assertEqual(html_node.props_to_html(), expected_props_html)
 
 
-    def test_repr(self):
-        html_node = HTMLNode(tag="some tag",
-                             value="This is the value",
-                             props={'alt': 'image alt text', 'src': 'http://www.example.com/image.png'},
-                             children = [
-                                 HTMLNode(value="Child 1"),
-                                 HTMLNode(value="Child 2"),
-                             ])
-        
+    def test_to_html_raises_error(self):
+        html_node = HTMLNode()
+
         with self.assertRaises(NotImplementedError):
             html_node.to_html()
 
