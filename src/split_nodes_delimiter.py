@@ -67,7 +67,7 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
 
         # Non-matching delimiters
         if len(old_text_split) == 2:
-            raise Exception(f"Mismatched delimiters: {old_node.text}")
+            raise Exception(f"Mismatched {text_type} \"{delimiter}\" delimiter:\n{old_node.text}\n")
         
         # Process text into TextNodes
         if len(old_text_split) == 3:
