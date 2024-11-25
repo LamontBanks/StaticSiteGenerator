@@ -11,6 +11,11 @@ class TextType(Enum):
     LINK = "link"
     IMAGE = "image"
 
+class TextDelimiter(Enum):
+    ITALIC = "*"
+    BOLD = "**"
+    CODE = "`"
+
 class TextNode():
 
     """
