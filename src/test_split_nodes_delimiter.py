@@ -71,14 +71,40 @@ class TestSplitNodesDelimiter(unittest.TestCase):
         ]
         self.assertEqual(split_nodes_image([node]), expected_split_nodes)
 
-        # No image
-        node = TextNode("This is text with a [rick roll](https://i.imgur.com/aKaOqIh.gif) and ![obi wan](https://i.imgur.com/fJRm4Vk.jpeg) image.", TextType.TEXT)
+        # No images
+        node = TextNode("This is text with a [rick roll](https://i.imgur.com/aKaOqIh.gif) and [obi wan](https://i.imgur.com/fJRm4Vk.jpeg) links.", TextType.TEXT)
         expected_split_nodes = [
-            TextNode(text="This is text with a [rick roll](https://i.imgur.com/aKaOqIh.gif) and ", text_type=TextType.TEXT, url=None),
-            TextNode(text="obi wan", text_type=TextType.IMAGE, url='https://i.imgur.com/fJRm4Vk.jpeg'),
-            TextNode(text=" image.", text_type=TextType.TEXT, url=None)
+            TextNode(text="This is text with a [rick roll](https://i.imgur.com/aKaOqIh.gif) and [obi wan](https://i.imgur.com/fJRm4Vk.jpeg) links.", text_type=TextType.TEXT, url=None)
         ]
         self.assertEqual(split_nodes_image([node]), expected_split_nodes)
+
+    def test_split_nodes_link(self):
+        # Multiple links
+        node = TextNode("This is text with a [link text 1](https://www.example.com) and [link text 2](https://www.example.2.com) link.", TextType.TEXT)
+        expected_split_nodes = [
+            TextNode(text="This is text with a ", text_type=TextType.TEXT, url=None),
+            TextNode(text="link text 1", text_type=TextType.LINK, url='https://www.example.com'),
+            TextNode(text=" and ", text_type=TextType.TEXT, url=None),
+            TextNode(text="link text 2", text_type=TextType.LINK, url='https://www.example.2.com'),
+            TextNode(text=" link.", text_type=TextType.TEXT, url=None)
+        ]
+        self.assertEqual(split_nodes_link([node]), expected_split_nodes)
+
+        # Image, link mix => only link
+        node = TextNode("This is text with a [link text 1](https://www.example.com) and ![image alt text](https://www.example.2.com/image.png) image.", TextType.TEXT)
+        expected_split_nodes = [
+            TextNode(text="This is text with a ", text_type=TextType.TEXT, url=None),
+            TextNode(text="link text 1", text_type=TextType.LINK, url='https://www.example.com'),
+            TextNode(text=" and ![image alt text](https://www.example.2.com/image.png) image.", text_type=TextType.TEXT, url=None)
+        ]
+        self.assertEqual(split_nodes_link([node]), expected_split_nodes)
+
+        # No links
+        node = TextNode("This is text with a ![rick roll](https://i.imgur.com/aKaOqIh.gif) and ![obi wan](https://i.imgur.com/fJRm4Vk.jpeg) images.", TextType.TEXT)
+        expected_split_nodes = [
+            TextNode(text="This is text with a ![rick roll](https://i.imgur.com/aKaOqIh.gif) and ![obi wan](https://i.imgur.com/fJRm4Vk.jpeg) images.", text_type=TextType.TEXT, url=None)
+        ]
+        self.assertEqual(split_nodes_link([node]), expected_split_nodes)
 
     def test_extract_markdown_images(self):
         # Image markdown

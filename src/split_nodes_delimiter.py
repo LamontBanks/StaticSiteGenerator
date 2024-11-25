@@ -95,7 +95,7 @@ def split_nodes_image(old_nodes):
     # Get matches
     # Recreate markdown
     # Split text, maxsplit=1
-    # create nodes for preceding text, imags
+    # create nodes for preceding text, images
     # Recursively handle remainining text
     new_nodes = []
 
@@ -149,8 +149,68 @@ def split_nodes_image(old_nodes):
                     remaining_split_nodes = split_nodes_image([TextNode(text_type=TextType.TEXT, text=remaining_text)])
                     if len(remaining_split_nodes) > 0:
                         new_nodes.extend(remaining_split_nodes)
+    return new_nodes
 
-    
+"""Split nodes, similar to split_nodes_delimiter(), but for link Markdown.
+Could probably refactor into a single method, but will copy-paste for speed"""
+def split_nodes_link(old_nodes):
+    # Get matches
+    # Recreate markdown
+    # Split text, maxsplit=1
+    # create nodes for preceding text, links
+    # Recursively handle remainining text
+    new_nodes = []
+
+    for old_node in old_nodes:
+        # Only process TextType.TEXT nodes
+        if old_node.text_type != TextType.TEXT:
+            new_nodes.append(old_node)
+            continue
+
+        # Skip empty strings
+        if old_node.text == "":
+            continue
+
+        # Get link matches
+        link_tuples = extract_markdown_links(old_node.text)
+
+        # No matches, add it and move on
+        if len(link_tuples) == 0:
+            new_nodes.append(old_node)
+            continue
+        # Otherwise, recreate markdown, and split the text to get the markdown
+        else:
+            link_text = link_tuples[0][0]
+            src = link_tuples[0][1]
+            link_markdown = f"[{link_text}]({src})"
+
+            old_text_split = old_node.text.split(link_markdown, maxsplit=1)
+
+            # Empty string (somehow)
+            if len(old_text_split) == 0:
+                continue
+
+            # No split, add node and move on
+            if len(old_text_split) == 1:
+                new_nodes.append(old_node)
+                continue
+
+            # Since we're using the actual markdown as a the delimiter,
+            # the string should split into 2 pieces: preceding and remaining text
+            if len(old_text_split) == 2:
+                preceding_text = old_text_split[0]
+                remaining_text = old_text_split[1]
+
+                if preceding_text != "":
+                    new_nodes.append(TextNode(text_type=TextType.TEXT, text=preceding_text))
+
+                # Create a LINK node
+                new_nodes.append(TextNode(text_type=TextType.LINK, text=link_text, url=src))
+
+                if remaining_text != "":
+                    remaining_split_nodes = split_nodes_link([TextNode(text_type=TextType.TEXT, text=remaining_text)])
+                    if len(remaining_split_nodes) > 0:
+                        new_nodes.extend(remaining_split_nodes)
     return new_nodes
 
 
