@@ -89,11 +89,15 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
         
     return new_nodes
 
-"""Returns a tuple of image inline Markdown, (<image alt text>, <image source>)
+"""Returns a tuple of image inline Markdown, [(<image alt text>, <image source>), (<image alt text>, <image source>), ...]
 """
 def extract_markdown_images(text):
     # '![image alt text](image src)'
     return re.findall(r"!\[(.+?)\]\((.+?)\)", text)
 
-print(extract_markdown_images('This is an ![image alt text](https://i.imgur.com/aKaOqIh.gif) and ![blah](https://i.imgur.com/1234.gif) vwrb3pom3'))
-print(extract_markdown_images('vebrb ![eqge vrwev](https://i.imgur.com/aKaOqIh.gif)'))
+"""Returns a tuple of link inline Markdown, [(<link>, <link src>), (<link>, <link src>), ...]
+"""
+def extract_markdown_links(text):
+    # '[link text](link src)'
+    # Regex lookback to avoid capturing image Markdown
+    return re.findall(r"(?<!!)\[(.*?)\]\((.*?)\)", text)
