@@ -63,6 +63,7 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
         # No split, add node and move on
         if len(old_text_split) == 1:
             new_nodes.append(old_node)
+            continue
 
         # Non-matching delimiters
         if len(old_text_split) == 2:
@@ -89,13 +90,79 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
         
     return new_nodes
 
+"""Split nodes, similar to split_nodes_delimiter(), but for image Markdown"""
+def split_nodes_image(old_nodes):
+    # Get matches
+    # Recreate markdown
+    # Split text, maxsplit=1
+    # create nodes for preceding text, imags
+    # Recursively handle remainining text
+    new_nodes = []
+
+    for old_node in old_nodes:
+        # Only process TextType.TEXT nodes
+        if old_node.text_type != TextType.TEXT:
+            new_nodes.append(old_node)
+            continue
+
+        # Skip empty strings
+        if old_node.text == "":
+            continue
+
+        # Get image matches
+        image_tuples = extract_markdown_images(old_node.text)
+
+        # No matches, add it and move on
+        if len(image_tuples) == 0:
+            new_nodes.append(old_node)
+            continue
+        # Otherwise, recreate markdown, and split the text to get the markdown
+        else:
+            alt_text = image_tuples[0][0]
+            src = image_tuples[0][1]
+            image_markdown = f"![{alt_text}]({src})"
+
+            old_text_split = old_node.text.split(image_markdown, maxsplit=1)
+
+            # Empty string (somehow)
+            if len(old_text_split) == 0:
+                continue
+
+            # No split, add node and move on
+            if len(old_text_split) == 1:
+                new_nodes.append(old_node)
+                continue
+
+            # Since we're using the actual markdown as a the delimiter,
+            # the string should split into 2 pieces: preceding and remaining text
+            if len(old_text_split) == 2:
+                preceding_text = old_text_split[0]
+                remaining_text = old_text_split[1]
+
+                if preceding_text != "":
+                    new_nodes.append(TextNode(text_type=TextType.TEXT, text=preceding_text))
+
+                # Create an IMAGE node
+                new_nodes.append(TextNode(text_type=TextType.IMAGE, text=alt_text, url=src))
+
+                if remaining_text != "":
+                    remaining_split_nodes = split_nodes_image([TextNode(text_type=TextType.TEXT, text=remaining_text)])
+                    if len(remaining_split_nodes) > 0:
+                        new_nodes.extend(remaining_split_nodes)
+
+    
+    return new_nodes
+
+
 """Returns a tuple of image inline Markdown, [(<image alt text>, <image source>), (<image alt text>, <image source>), ...]
+Helper method for split_nodes_image()
 """
 def extract_markdown_images(text):
     # '![image alt text](image src)'
     return re.findall(r"!\[(.+?)\]\((.+?)\)", text)
 
 """Returns a tuple of link inline Markdown, [(<link>, <link src>), (<link>, <link src>), ...]
+Helper method for split_nodes_link()
 """
 def extract_markdown_links(text):
     # '[link text](link src)'
