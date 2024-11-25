@@ -50,5 +50,22 @@ class TestSplitNodesDelimiter(unittest.TestCase):
 
         self.assertEqual(split_nodes_delimiter([node], TextDelimiter.BOLD.value, TextType.BOLD), expected_split_nodes)
 
+    def test_extract_markdown_images(self):
+        # Image markdown
+        text = "This is text with a ![rick roll](https://i.imgur.com/aKaOqIh.gif) and ![obi wan](https://i.imgur.com/fJRm4Vk.jpeg)"
+        expected_image_tuples = [('rick roll', 'https://i.imgur.com/aKaOqIh.gif'),
+                                 ('obi wan', 'https://i.imgur.com/fJRm4Vk.jpeg')]
+        self.assertEqual(extract_markdown_images(text), expected_image_tuples)
+
+        # No matches
+        text = "This is text without any image markdown"
+        expected_image_tuples = []
+        self.assertEqual(extract_markdown_images(text), expected_image_tuples)
+
+        # Mix Markdown, only 1 match found
+        text = "This is text with a [rick roll](https://i.imgur.com/aKaOqIh.gif) and ![obi wan](https://i.imgur.com/fJRm4Vk.jpeg)"
+        expected_image_tuples = [('obi wan', 'https://i.imgur.com/fJRm4Vk.jpeg')]
+        self.assertEqual(extract_markdown_images(text), expected_image_tuples)
+
 if __name__ == "__main__":
     unittest.main()

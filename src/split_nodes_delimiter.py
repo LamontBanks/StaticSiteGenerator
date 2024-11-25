@@ -1,5 +1,5 @@
+import re
 from textnode import *
-import pprint
 
 """
 Convert a `list` of TextNodes where Markdown words are split, and converted into the specified TextType.
@@ -18,7 +18,8 @@ Ex:
         TextNode(" word", TextType.TEXT),
     ]
 
-Does not support nested Markdown.
+Does not support nested Markdown
+Given delimiters like bold ("**") and italics ("*") are similar, the order of calling this function will affect the correctness of output
 """
 def split_nodes_delimiter(old_nodes, delimiter, text_type):
     # If a Markdown is properly delimited, the string will always maxsplit=2 into *3* strings on the delimiter
@@ -35,12 +36,12 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
     # '`Code` is proper Markdown'.split("`", maxsplit=2)        => ['', 'Code', ' is proper Markdown']     # Empty string beofre
     # '`code`'.split("`", maxsplit=2)                           => ['', 'code', '']                        # Empty string before and after
 
+    # Steps:
     # Split the string once to find the first match
     # Add the first string as a TextType.TEXT node to the new_nodes
     # Then, add the second string as the specific TextType (Ex: TextType.CODE)
     # Finally, pass the final string into this function recursively
     # Extend new_nodes with the recursive output
-
     new_nodes = []
     for old_node in old_nodes:
         # Only process TextType.TEXT nodes
@@ -88,8 +89,11 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
         
     return new_nodes
 
-# node = TextNode("This is text with a `code block` word and here's `another` and `another one`.", TextType.TEXT)
-# node = TextNode("Here is a bold **word**", TextType.TEXT)
-# new_nodes = split_nodes_delimiter([node], TextDelimiter.CODE.value, TextType.CODE)
+"""Returns a tuple of image inline Markdown, (<image alt text>, <image source>)
+"""
+def extract_markdown_images(text):
+    # '![image alt text](image src)'
+    return re.findall(r"!\[(.+?)\]\((.+?)\)", text)
 
-# pprint.pprint(new_nodes)
+print(extract_markdown_images('This is an ![image alt text](https://i.imgur.com/aKaOqIh.gif) and ![blah](https://i.imgur.com/1234.gif) vwrb3pom3'))
+print(extract_markdown_images('vebrb ![eqge vrwev](https://i.imgur.com/aKaOqIh.gif)'))
