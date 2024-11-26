@@ -1,8 +1,8 @@
 from textnode import *
+from leafnode import *
 from htmlnode import *
 
 """Converts a TextNode to an HTML LeafNode
-
 - `TextType.TEXT`: `None` tag, text
 - `TextType.BOLD`: "b" tag, text
 - `TextType.ITALIC`: "i" tag, text
@@ -16,17 +16,17 @@ def text_node_to_html_node(text_node):
 
     match text_node.text_type:
         case TextType.TEXT:
-            return HTMLNode(tag=HTMLTag.TEXT, value=text)
+            return LeafNode(tag=HTMLTag.TEXT, value=text)
         case TextType.BOLD:
-            return HTMLNode(tag=HTMLTag.BOLD, value=text)
+            return LeafNode(tag=HTMLTag.BOLD, value=text)
         case TextType.ITALIC:
-            return HTMLNode(tag=HTMLTag.ITALIC, value=text)
+            return LeafNode(tag=HTMLTag.ITALIC, value=text)
         case TextType.CODE:
-            return HTMLNode(tag=HTMLTag.CODE, value=text)
+            return LeafNode(tag=HTMLTag.CODE, value=text)
         case TextType.LINK:
-            return HTMLNode(tag=HTMLTag.LINK, value=text, props={"href": url})
+            return LeafNode(tag=HTMLTag.LINK, value=text, props={"href": url})
         case TextType.IMAGE:
-            return HTMLNode(tag=HTMLTag.IMAGE, value=None, props={"alt": text, "src": url})
+            return LeafNode(tag=HTMLTag.IMAGE, value="", props={"alt": text, "src": url})
         case _:
             raise Exception(f"Unrecognized TextType: {text_node.text_type}")
         
