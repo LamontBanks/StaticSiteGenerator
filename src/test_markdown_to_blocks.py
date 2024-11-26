@@ -57,5 +57,6 @@ This is a paragraph of text. It has some **bold** and *italic* words inside of i
 
         self.assertEqual(markdown_to_blocks(markdown), expected_blocks)
 
+
 if __name__ == "__main__":
     unittest.main()
