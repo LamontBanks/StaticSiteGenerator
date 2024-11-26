@@ -12,9 +12,9 @@ The paragraph is a ParentNode, bold tag is the LeafNode:
 class LeafNode(HTMLNode):
 
     """
-        * param `tag` - `str` representing the tag name, ex: `"p"` (for `<p>`), `"h1"` (for `<h1>`), required
-        * param `value` - Required, the value inside the HTML tag, ex: `<h1>This is the value</h1>`, required
-        * param `props` - dictionary of HTML tag attributes, ex: `{"alt": "this is image alt text", "src": "http://example.com/image.png"}`
+        * `tag` - `str` representing the tag name, ex: `"p"` (for `<p>`), `"h1"` (for `<h1>`), required
+        * `value` - Required, the value inside the HTML tag, ex: `<h1>This is the value</h1>`, required
+        * `props` - dictionary of HTML tag attributes, ex: `{"alt": "this is image alt text", "src": "http://example.com/image.png"}`
     """
     def __init__(self, tag, value, props=None):
         if (value == None):

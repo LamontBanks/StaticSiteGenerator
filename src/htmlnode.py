@@ -16,10 +16,10 @@ Ex: <p>, <div>, <h1>, <ul><li><li>...</ul>, <img alt="" src="">, etc.
 class HTMLNode():
 
     """Creates an HTML node
-        * param `tag` - `str` representing the tag name, ex: `"p"` (for `<p>`), `"h1"` (for `<h1>`)
-        * param `value` - the value inside the HTML tag, ex: `<h1>This is the value</h1>`
-        * param `children` - list of `HTMLNodes` nested within the tag
-        * param `props` - dictionary of HTML tag attributes, ex: `{"alt": "this is image alt text", "src": "http://example.com/image.png"}`
+        * `tag` - `str` representing the tag name, ex: `"p"` (for `<p>`), `"h1"` (for `<h1>`)
+        * `value` - the value inside the HTML tag, ex: `<h1>This is the value</h1>`
+        * `children` - list of `HTMLNodes` nested within the tag
+        * `props` - dictionary of HTML tag attributes, ex: `{"alt": "this is image alt text", "src": "http://example.com/image.png"}`
 
     All parameters are optional (defaults to `None`) - which values are set represent different HTML tag uses:
         - No `tag` - render as raw text

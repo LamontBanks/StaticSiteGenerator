@@ -12,9 +12,9 @@ Ex: <ul> is a ParentNode, <li> are LeafNodes:
 class ParentNode(HTMLNode):
 
     """
-    param tag - HTML tag `str`, required
-    param children - `list` of HTMLNodes, required
-    props - `dict` of HTML attributes
+        - tag - HTML tag `str`, required
+        - children - `list` of HTMLNodes, required
+        - props - `dict` of HTML attributes
     """
     def __init__(self, tag, children, props=None):
         if (tag == None):

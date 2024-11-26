@@ -19,9 +19,9 @@ class TextDelimiter(Enum):
 class TextNode():
 
     """
-    param `text` - Text content of the node
-    param `text_type` - `TextType` enum
-    param `url` - of the link or image, defaults to `None`.
+    - `text` - Text content of the node
+    - `text_type` - `TextType` enum
+    - `url` - of the link or image, defaults to `None`.
     """
     def __init__(self, text, text_type, url=None):
         self.text = text

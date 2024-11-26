@@ -4,8 +4,8 @@ from textnode import *
 """
 Convert a `list` of TextNodes where Markdown words are split, and converted into the specified TextType.
 
-- param old_nodes - `list` of TextNodes
-- param delimiter - `str` Markdown delimiter
+- old_nodes - `list` of TextNodes
+- delimiter - `str` Markdown delimiter
 
 Ex:
     node = TextNode("This is text with a `code block` word", TextType.TEXT)
