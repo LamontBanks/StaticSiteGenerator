@@ -70,3 +70,6 @@ class testMarkdownToTextNodes(unittest.TestCase):
             TextNode("This is plain text.", TextType.TEXT)
         ]
         self.assertEqual(text_to_textnodes(markdown), expected_text_nodes)
+
+if __name__ == "__main__":
+    unittest.main()
