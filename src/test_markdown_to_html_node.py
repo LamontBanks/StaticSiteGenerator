@@ -97,23 +97,12 @@ class TestClass():
                 LeafNode(tag=HTMLTag.HEADING_6, value="H6 Code Block"),
 
                 ParentNode(tag=HTMLTag.PRE, children=[
-                    LeafNode(tag=HTMLTag.CODE, value="class TestClass():"),
-                    LeafNode(tag=HTMLTag.CODE, value="    def __init__(self, x, y=5):"),
-                    LeafNode(tag=HTMLTag.CODE, value="        self.x = x"),
-                    LeafNode(tag=HTMLTag.CODE, value="        self.y = y + x"),
-                    LeafNode(tag=HTMLTag.CODE, value="    def sum(self):"),
-                    LeafNode(tag=HTMLTag.CODE, value="        return self.x + self.y")
+                    LeafNode(tag=HTMLTag.CODE, value="class TestClass():\n    def __init__(self, x, y=5):\n        self.x = x\n        self.y = y + x\n    def sum(self):\n        return self.x + self.y")
                 ]),
 
                 LeafNode(tag=HTMLTag.HEADING_4, value="Some Block Quotes"),
 
-                ParentNode(tag=HTMLTag.BLOCKQUOTE, children=[
-                    LeafNode(tag=HTMLTag.TEXT, value="As above, so below"),
-                    LeafNode(tag=HTMLTag.BREAK_ROW, value=""),
-                    LeafNode(tag=HTMLTag.TEXT, value="Once more, with feeling"),
-                    LeafNode(tag=HTMLTag.BREAK_ROW, value=""),
-                    LeafNode(tag=HTMLTag.TEXT, value="I'm not arrogant, I'm right!")
-                ])
+                LeafNode(tag=HTMLTag.BLOCKQUOTE, value="As above, so below\nOnce more, with feeling\nI'm not arrogant, I'm right!")
             ])
     
         self.assertEqual(markdown_to_html_node(markdown), expected_html_nodes)

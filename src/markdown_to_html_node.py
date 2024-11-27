@@ -59,21 +59,17 @@ def markdown_to_html_node(markdown):
                 html_nodes.append(ul_html_node)
 
             case BlockType.QUOTE:
+                # Split to get the quote text, but recombine into single quote string (with newlines)
+                # Wrap entire string in <blockquote>
                 lines = block.split("\n")
-                blockquote_children = []
-                # Split, grab text value, add a <br></br> tag between lines
+                raw_quote_string = ""
                 for line in lines:
                     quote_text = line.split(maxsplit=1)[1]
-                    quote_text_html_node = LeafNode(HTMLTag.TEXT, quote_text)
-                    br_html_node = LeafNode(HTMLTag.BREAK_ROW, value="")
+                    raw_quote_string += quote_text + "\n"
+                raw_quote_string = raw_quote_string.strip()
 
-                    blockquote_children.append(quote_text_html_node)
-                    blockquote_children.append(br_html_node)
-                # Remove the trailing <br>, if any
-                if len(blockquote_children) > 0:
-                    blockquote_children.pop()
                 # Wrap in <blockquote>
-                blockquote_html_node = ParentNode(HTMLTag.BLOCKQUOTE, blockquote_children)
+                blockquote_html_node = LeafNode(HTMLTag.BLOCKQUOTE, raw_quote_string)
                 html_nodes.append(blockquote_html_node)
 
             case BlockType.HEADING:
@@ -103,23 +99,18 @@ def markdown_to_html_node(markdown):
                     heading_html_node = LeafNode(heading_tag, header_text)
                     html_nodes.append(heading_html_node)
             
-            # <pre>
-            # <code><!-- code --></code>
-            # <code><!-- goes --></code>
-            # <code><!-- here --></code>
-            # <</pre>
+            # <pre><code>hello()\nworld()</code></pre>
             case BlockType.CODE:
+                # Skip the leading and trailing "```", and recombine the raw code line with newlines
                 lines = block.split("\n")
-                # Remove the leading and trailing "```"
-                lines.pop(0)
-                lines.pop()
+                raw_code_string = ""
+                for i in range(1, len(lines) - 1):
+                    raw_code_string += lines[i] + "\n"
+                raw_code_string = raw_code_string.strip()
 
-                pre_children = []
-                for line in lines:
-                    code_html_node = LeafNode(HTMLTag.CODE, line)
-                    pre_children.append(code_html_node)
-                # Wrap in <pre>
-                pre_html_node = ParentNode(HTMLTag.PRE, pre_children)
+                # Wrap raw code in <code>, then in <pre>
+                code_html_node = LeafNode(HTMLTag.CODE, raw_code_string) 
+                pre_html_node = ParentNode(HTMLTag.PRE, [code_html_node])
                 html_nodes.append(pre_html_node)
 
             # Default to raw text in a <p> block
@@ -129,3 +120,48 @@ def markdown_to_html_node(markdown):
     # Enclose everything in a <div>
     top_div = ParentNode("div", html_nodes)
     return top_div
+
+
+markdown = """
+# Plaintext Formatting
+
+This is **text** with an *italic* word and `inline code`.
+Here's an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link to Boot.dev](https://boot.dev)
+
+## Lists
+
+Ordered List
+
+1. First item
+2. Second item
+3. Third item
+
+Unordered List
+
+- Item one
+- Item two
+- Item three
+
+### Headings
+
+##### H5 Heading
+
+###### H6 Code Block
+
+```
+class TestClass():
+  def __init__(self, x, y=5):
+    self.x = x
+    self.y = y + x
+  def sum(self):
+    return self.x + self.y
+```
+
+#### Some Block Quotes
+
+> As above, so below
+> Once more, with feeling
+> I'm not arrogant, I'm right!
+"""
+
+# print(markdown_to_html_node(markdown).to_html())
