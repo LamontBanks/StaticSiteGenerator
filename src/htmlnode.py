@@ -1,12 +1,24 @@
-from enum import Enum
-
-class HTMLTag(Enum):
+class HTMLTag():
     TEXT = None
-    BOLD = "b"
+    PARAGRAPH = "p"
     ITALIC = "i"
+    BOLD = "b"
+    PRE = "pre"
     CODE = "code"
     LINK = "a"
     IMAGE = "img"
+    BREAK_ROW = "br"
+    DIV = "div"
+    ORDERED_LIST = "ol"
+    UNORDERED_LIST = "ul"
+    LIST_ITEM = "li"
+    BLOCKQUOTE = "blockquote"
+    HEADING_1 = 'h1'
+    HEADING_2 = 'h2'
+    HEADING_3 = 'h3'
+    HEADING_4 = 'h4'
+    HEADING_5 = 'h5'
+    HEADING_6 = 'h6'
 
 """
 Represents a node in an HTML document

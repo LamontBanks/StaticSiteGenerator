@@ -1,0 +1,122 @@
+import unittest
+
+from htmlnode import *
+from leafnode import *
+from parentnode import *
+from markdown_to_html_node import *
+
+class TestMarkdownToHtmlNode(unittest.TestCase):
+
+    def set_up(self):
+        self.maxDiff = None
+
+    def test_full_conversion(self):
+        markdown = """
+# Plaintext Formatting
+
+This is **text** with an *italic* word and `inline code`.
+Here's an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link to Boot.dev](https://boot.dev)
+
+## Lists
+
+Ordered List
+
+1. First item
+2. Second item
+3. Third item
+
+Unordered List
+
+- Item one
+- Item two
+- Item three
+
+### Headings
+
+##### H5 Heading
+
+###### H6 Code Block
+
+```
+class TestClass():
+    def __init__(self, x, y=5):
+        self.x = x
+        self.y = y + x
+    def sum(self):
+        return self.x + self.y
+```
+
+#### Some Block Quotes
+
+> As above, so below
+> Once more, with feeling
+> I'm not arrogant, I'm right!
+"""
+
+        expected_html_nodes = ParentNode(tag=HTMLTag.DIV, children=[
+                LeafNode(tag=HTMLTag.HEADING_1, value="Plaintext Formatting"),
+
+                ParentNode(tag=HTMLTag.PARAGRAPH, children=[
+                    LeafNode(tag=HTMLTag.TEXT, value="This is "),
+                    LeafNode(tag=HTMLTag.BOLD, value="text"),
+                    LeafNode(tag=HTMLTag.TEXT, value=" with an "),
+                    LeafNode(tag=HTMLTag.ITALIC, value="italic"),
+                    LeafNode(tag=HTMLTag.TEXT, value=" word and "),
+                    LeafNode(tag=HTMLTag.CODE, value="inline code"),
+                    # Line break and period are together
+                    LeafNode(tag=HTMLTag.TEXT, value=".\nHere's an "),
+                    LeafNode(tag=HTMLTag.IMAGE, value="", props={ 'src': 'https://i.imgur.com/fJRm4Vk.jpeg', 'alt': 'obi wan image'}),
+                    LeafNode(tag=HTMLTag.TEXT, value=" and a "),
+                    LeafNode(tag=HTMLTag.LINK, value='link to Boot.dev', props={ 'href': 'https://boot.dev'})
+                ]),
+                    
+                LeafNode(tag=HTMLTag.HEADING_2, value="Lists"),
+
+                ParentNode(tag=HTMLTag.PARAGRAPH, children=[
+                    LeafNode(tag=HTMLTag.TEXT, value="Ordered List")
+                ]),
+
+                ParentNode(tag=HTMLTag.ORDERED_LIST, children=[
+                    LeafNode(tag=HTMLTag.LIST_ITEM, value="First item"),
+                    LeafNode(tag=HTMLTag.LIST_ITEM, value="Second item"),
+                    LeafNode(tag=HTMLTag.LIST_ITEM, value="Third item")
+                ]),
+
+                ParentNode(tag=HTMLTag.PARAGRAPH, children=[
+                    LeafNode(tag=HTMLTag.TEXT, value="Unordered List")
+                ]),
+
+                ParentNode(tag=HTMLTag.UNORDERED_LIST, children=[
+                    LeafNode(tag=HTMLTag.LIST_ITEM, value="Item one"),
+                    LeafNode(tag=HTMLTag.LIST_ITEM, value="Item two"),
+                    LeafNode(tag=HTMLTag.LIST_ITEM, value="Item three")
+                ]),
+
+                LeafNode(tag=HTMLTag.HEADING_3, value="Headings"),
+                LeafNode(tag=HTMLTag.HEADING_5, value="H5 Heading"),
+                LeafNode(tag=HTMLTag.HEADING_6, value="H6 Code Block"),
+
+                ParentNode(tag=HTMLTag.PRE, children=[
+                    LeafNode(tag=HTMLTag.CODE, value="class TestClass():"),
+                    LeafNode(tag=HTMLTag.CODE, value="    def __init__(self, x, y=5):"),
+                    LeafNode(tag=HTMLTag.CODE, value="        self.x = x"),
+                    LeafNode(tag=HTMLTag.CODE, value="        self.y = y + x"),
+                    LeafNode(tag=HTMLTag.CODE, value="    def sum(self):"),
+                    LeafNode(tag=HTMLTag.CODE, value="        return self.x + self.y")
+                ]),
+
+                LeafNode(tag=HTMLTag.HEADING_4, value="Some Block Quotes"),
+
+                ParentNode(tag=HTMLTag.BLOCKQUOTE, children=[
+                    LeafNode(tag=HTMLTag.TEXT, value="As above, so below"),
+                    LeafNode(tag=HTMLTag.BREAK_ROW, value=""),
+                    LeafNode(tag=HTMLTag.TEXT, value="Once more, with feeling"),
+                    LeafNode(tag=HTMLTag.BREAK_ROW, value=""),
+                    LeafNode(tag=HTMLTag.TEXT, value="I'm not arrogant, I'm right!")
+                ])
+            ])
+    
+        self.assertEqual(markdown_to_html_node(markdown), expected_html_nodes)
+
+if __name__ == "__main__":
+    unittest.main()
