@@ -37,7 +37,15 @@ def markdown_to_html_node(markdown):
                     # List Item format:
                     #   123. item text
                     list_item_text = line.split(maxsplit=1)[1]
-                    list_item_html_node = LeafNode(HTMLTag.LIST_ITEM, list_item_text)
+
+                    text_nodes = text_to_textnodes(list_item_text)
+                    li_children = []
+                    # Convert each TextNode to an HTMLNode
+                    for text_node in text_nodes:
+                        text_html_node = text_node_to_html_node(text_node)
+                        li_children.append(text_html_node)
+
+                    list_item_html_node = ParentNode(HTMLTag.LIST_ITEM, li_children)
                     ol_children.append(list_item_html_node)
                 # Wrap in <ol>
                 ol_html_node = ParentNode(HTMLTag.ORDERED_LIST, ol_children)
@@ -52,7 +60,14 @@ def markdown_to_html_node(markdown):
                     # List Item format:
                     #   - item text or * item text
                     list_item_text = line.split(maxsplit=1)[1]
-                    list_item_html_node = LeafNode(HTMLTag.LIST_ITEM, list_item_text)
+                    text_nodes = text_to_textnodes(list_item_text)
+                    li_children = []
+                    # Convert each TextNode to an HTMLNode
+                    for text_node in text_nodes:
+                        text_html_node = text_node_to_html_node(text_node)
+                        li_children.append(text_html_node)
+
+                    list_item_html_node = ParentNode(HTMLTag.LIST_ITEM, li_children)
                     ul_children.append(list_item_html_node)
                 # Wrap in <ul>
                 ul_html_node = ParentNode(HTMLTag.UNORDERED_LIST, ul_children)

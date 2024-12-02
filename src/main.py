@@ -1,5 +1,6 @@
 import os
 import shutil
+from markdown_to_html_node import *
 
 """Copies all files and directories from the `source_dir` to the `dest_dir`
 Creates the dest_dir if it does not exist and deletes all content within
@@ -54,5 +55,31 @@ def directory_file_names(dir):
 
     return file_paths
 
-# Generate public directory
+"""Converts the Markdown page located at from_path and generates an HTML page at dest_path
+Formats using the  HTML template at template_path"""
+def generate_page(from_path, template_path, dest_path):
+    markdown = read_file_text(from_path)
+    title = extract_title(markdown)
+    markdown_html = markdown_to_html_node(markdown).to_html()
+
+    template = read_file_text(template_path)
+    html_page = template.replace('{{ Title }}', title).replace('{{ Content }}', markdown_html)
+
+    write_file_text(html_page, dest_path)
+ 
+
+def read_file_text(path):
+    text = ""
+    with open(path, encoding="utf-8") as f:
+        text = f.read()
+    return text
+
+def write_file_text(text, path):
+    with open(path, 'w', encoding="utf-8") as f:
+        f.write(text)
+
+
+### Generate page ###
+
 copy_files_between_directories('static', 'public')
+generate_page('content/index.md', 'template.html', 'public/index.html')

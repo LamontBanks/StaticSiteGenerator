@@ -52,7 +52,6 @@ class TestClass():
 > Once more, with feeling
 > I'm not arrogant, I'm right!
 """
-
         expected_html_nodes = ParentNode(tag=HTMLTag.DIV, children=[
                 LeafNode(tag=HTMLTag.HEADING_1, value="Plaintext Formatting"),
 
@@ -77,9 +76,15 @@ class TestClass():
                 ]),
 
                 ParentNode(tag=HTMLTag.ORDERED_LIST, children=[
-                    LeafNode(tag=HTMLTag.LIST_ITEM, value="First item"),
-                    LeafNode(tag=HTMLTag.LIST_ITEM, value="Second item"),
-                    LeafNode(tag=HTMLTag.LIST_ITEM, value="Third item")
+                    ParentNode(tag=HTMLTag.LIST_ITEM, children=[
+                        LeafNode(tag=HTMLTag.TEXT, value="First item")
+                    ]),
+                    ParentNode(tag=HTMLTag.LIST_ITEM, children=[
+                        LeafNode(tag=HTMLTag.TEXT, value="Second item")
+                    ]),
+                    ParentNode(tag=HTMLTag.LIST_ITEM, children=[
+                        LeafNode(tag=HTMLTag.TEXT, value="Third item")
+                    ])
                 ]),
 
                 ParentNode(tag=HTMLTag.PARAGRAPH, children=[
@@ -87,9 +92,15 @@ class TestClass():
                 ]),
 
                 ParentNode(tag=HTMLTag.UNORDERED_LIST, children=[
-                    LeafNode(tag=HTMLTag.LIST_ITEM, value="Item one"),
-                    LeafNode(tag=HTMLTag.LIST_ITEM, value="Item two"),
-                    LeafNode(tag=HTMLTag.LIST_ITEM, value="Item three")
+                    ParentNode(tag=HTMLTag.LIST_ITEM, children=[
+                        LeafNode(tag=HTMLTag.TEXT, value="Item one")
+                    ]),
+                    ParentNode(tag=HTMLTag.LIST_ITEM, children=[
+                        LeafNode(tag=HTMLTag.TEXT, value="Item two")
+                    ]),
+                    ParentNode(tag=HTMLTag.LIST_ITEM, children=[
+                        LeafNode(tag=HTMLTag.TEXT, value="Item three")
+                    ])
                 ]),
 
                 LeafNode(tag=HTMLTag.HEADING_3, value="Headings"),
