@@ -54,4 +54,5 @@ def directory_file_names(dir):
 
     return file_paths
 
-# copy_files_between_directories('static', 'public')
+# Generate public directory
+copy_files_between_directories('static', 'public')
