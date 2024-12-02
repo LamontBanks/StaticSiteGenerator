@@ -143,6 +143,6 @@ def extract_title(markdown):
     if markdown.startswith(f"# "):
         # '# Title' => ['', 'Title'] => Title
         title = markdown.split('\n\n')[0].split(f"# ")[1]
-        return title
+        return title.strip()
     else:
         raise Exception("Markdown document must start with an H1 line")
