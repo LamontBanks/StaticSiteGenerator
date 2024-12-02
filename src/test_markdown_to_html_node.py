@@ -107,5 +107,26 @@ class TestClass():
     
         self.assertEqual(markdown_to_html_node(markdown), expected_html_nodes)
 
+    def test_extract_title(self):
+        markdown = """
+# Plaintext Formatting
+
+This is **text** with an *italic* word and `inline code`.
+Here's an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link to Boot.dev](https://boot.dev)
+
+## Lists
+
+Ordered List
+
+1. First item
+2. Second item
+3. Third item
+"""
+        self.assertEqual(extract_title(markdown), 'Plaintext Formatting')
+
+        # No title
+        with self.assertRaises(Exception):
+            extract_title("### Title")
+
 if __name__ == "__main__":
     unittest.main()

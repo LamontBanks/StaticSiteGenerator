@@ -121,47 +121,28 @@ def markdown_to_html_node(markdown):
     top_div = ParentNode("div", html_nodes)
     return top_div
 
+"""Returns the title of the Markdown doc
+Title should be an H1 line at the start of the document, ex:
 
-markdown = """
-# Plaintext Formatting
+# This is the Title
 
-This is **text** with an *italic* word and `inline code`.
-Here's an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link to Boot.dev](https://boot.dev)
+Other content comes after
 
-## Lists
+- item 1
+- item 2
 
-Ordered List
+## Some other header
 
-1. First item
-2. Second item
-3. Third item
+```code()```
 
-Unordered List
-
-- Item one
-- Item two
-- Item three
-
-### Headings
-
-##### H5 Heading
-
-###### H6 Code Block
-
-```
-class TestClass():
-  def __init__(self, x, y=5):
-    self.x = x
-    self.y = y + x
-  def sum(self):
-    return self.x + self.y
-```
-
-#### Some Block Quotes
-
-> As above, so below
-> Once more, with feeling
-> I'm not arrogant, I'm right!
+=> This is the Title
+# TODO: Put Markdown syntax into a clas/enum
 """
-
-# print(markdown_to_html_node(markdown).to_html())
+def extract_title(markdown):
+    markdown = markdown.strip()
+    if markdown.startswith(f"# "):
+        # '# Title' => ['', 'Title'] => Title
+        title = markdown.split('\n\n')[0].split(f"# ")[1]
+        return title
+    else:
+        raise Exception("Markdown document must start with an H1 line")
