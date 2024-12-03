@@ -4,10 +4,15 @@ Render Markdown files into a static HTML files, written in Python.
 
 Guided backend development project using [boot.dev](https://www.boot.dev/courses/build-static-site-generator-python).
 
-# Limitations
-- Markdown must be valid
-    - Code blocks cannot have blank lines
-    - No nested Markdown
+## Demo
+
+1. `content/index.md`:
+![Markdown doc](/markdown.png)
+
+1. `$ ./main.sh`
+
+3. `public/index.html`
+![HTML doc](/html.png)
 
 # Requirements
 
@@ -24,3 +29,8 @@ Guided backend development project using [boot.dev](https://www.boot.dev/courses
     Run file individually:
     
     $ python3 src/<file name>.py    # No unittest in the commmand
+
+# Limitations
+- Markdown must be valid
+    - Code blocks cannot have blank lines
+    - No nested Markdown
