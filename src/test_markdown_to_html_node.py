@@ -35,7 +35,7 @@ Unordered List
 
 ##### H5 Heading
 
-###### H6 Code Block
+###### H6 `Code` Block
 
 ```
 class TestClass():
@@ -53,7 +53,9 @@ class TestClass():
 > I'm not arrogant, I'm right!
 """
         expected_html_nodes = ParentNode(tag=HTMLTag.DIV, children=[
-                LeafNode(tag=HTMLTag.HEADING_1, value="Plaintext Formatting"),
+                ParentNode(tag=HTMLTag.HEADING_1, children=[
+                    LeafNode(tag=HTMLTag.TEXT, value="Plaintext Formatting")
+                ]),
 
                 ParentNode(tag=HTMLTag.PARAGRAPH, children=[
                     LeafNode(tag=HTMLTag.TEXT, value="This is "),
@@ -68,8 +70,10 @@ class TestClass():
                     LeafNode(tag=HTMLTag.TEXT, value=" and a "),
                     LeafNode(tag=HTMLTag.LINK, value='link to Boot.dev', props={ 'href': 'https://boot.dev'})
                 ]),
-                    
-                LeafNode(tag=HTMLTag.HEADING_2, value="Lists"),
+
+                ParentNode(tag=HTMLTag.HEADING_2, children=[
+                    LeafNode(tag=HTMLTag.TEXT, value="Lists")
+                ]),
 
                 ParentNode(tag=HTMLTag.PARAGRAPH, children=[
                     LeafNode(tag=HTMLTag.TEXT, value="Ordered List")
@@ -103,15 +107,27 @@ class TestClass():
                     ])
                 ]),
 
-                LeafNode(tag=HTMLTag.HEADING_3, value="Headings"),
-                LeafNode(tag=HTMLTag.HEADING_5, value="H5 Heading"),
-                LeafNode(tag=HTMLTag.HEADING_6, value="H6 Code Block"),
+                ParentNode(tag=HTMLTag.HEADING_3, children=[
+                    LeafNode(tag=HTMLTag.TEXT, value="Headings")
+                ]),
+
+                ParentNode(tag=HTMLTag.HEADING_5, children=[
+                    LeafNode(tag=HTMLTag.TEXT, value="H5 Heading")
+                ]),
+
+                ParentNode(tag=HTMLTag.HEADING_6, children=[
+                    LeafNode(tag=HTMLTag.TEXT, value="H6 "),
+                    LeafNode(tag=HTMLTag.CODE, value="Code"),
+                    LeafNode(tag=HTMLTag.TEXT, value=" Block")
+                ]),
 
                 ParentNode(tag=HTMLTag.PRE, children=[
                     LeafNode(tag=HTMLTag.CODE, value="class TestClass():\n    def __init__(self, x, y=5):\n        self.x = x\n        self.y = y + x\n    def sum(self):\n        return self.x + self.y")
                 ]),
 
-                LeafNode(tag=HTMLTag.HEADING_4, value="Some Block Quotes"),
+                ParentNode(tag=HTMLTag.HEADING_4, children=[
+                    LeafNode(tag=HTMLTag.TEXT, value="Some Block Quotes")
+                ]),
 
                 LeafNode(tag=HTMLTag.BLOCKQUOTE, value="As above, so below\nOnce more, with feeling\nI'm not arrogant, I'm right!")
             ])

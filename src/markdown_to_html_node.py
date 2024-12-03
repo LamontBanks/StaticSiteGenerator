@@ -18,13 +18,7 @@ def markdown_to_html_node(markdown):
         match block_type:
             # Normal text: Wrap inline Markdown in <p>
             case BlockType.NORMAL:
-                text_nodes = text_to_textnodes(block)
-                p_children = []
-                # Convert each TextNode to an HTMLNode, add to <p> children
-                for text_node in text_nodes:
-                    text_html_node = text_node_to_html_node(text_node)
-                    p_children.append(text_html_node)
-                # Wrap in <p> 
+                p_children = text_to_htmlnodes(block)
                 p_html_node = ParentNode("p", p_children)
                 html_nodes.append(p_html_node)
 
@@ -38,13 +32,7 @@ def markdown_to_html_node(markdown):
                     #   123. item text
                     list_item_text = line.split(maxsplit=1)[1]
 
-                    text_nodes = text_to_textnodes(list_item_text)
-                    li_children = []
-                    # Convert each TextNode to an HTMLNode
-                    for text_node in text_nodes:
-                        text_html_node = text_node_to_html_node(text_node)
-                        li_children.append(text_html_node)
-
+                    li_children = text_to_htmlnodes(list_item_text)
                     list_item_html_node = ParentNode(HTMLTag.LIST_ITEM, li_children)
                     ol_children.append(list_item_html_node)
                 # Wrap in <ol>
@@ -58,14 +46,9 @@ def markdown_to_html_node(markdown):
                 # Grab the text, create a leafnode, add to <ul> children
                 for line in lines:
                     # List Item format:
-                    #   - item text or * item text
+                    #   - item text | * item text
                     list_item_text = line.split(maxsplit=1)[1]
-                    text_nodes = text_to_textnodes(list_item_text)
-                    li_children = []
-                    # Convert each TextNode to an HTMLNode
-                    for text_node in text_nodes:
-                        text_html_node = text_node_to_html_node(text_node)
-                        li_children.append(text_html_node)
+                    li_children = text_to_htmlnodes(list_item_text)
 
                     list_item_html_node = ParentNode(HTMLTag.LIST_ITEM, li_children)
                     ul_children.append(list_item_html_node)
@@ -111,7 +94,8 @@ def markdown_to_html_node(markdown):
                         case _:
                             heading_tag = HTMLTag.TEXT
                     # Create header tag
-                    heading_html_node = LeafNode(heading_tag, header_text)
+                    header_children = text_to_htmlnodes(header_text)
+                    heading_html_node = ParentNode(heading_tag, header_children)
                     html_nodes.append(heading_html_node)
             
             # <pre><code>hello()\nworld()</code></pre>
@@ -136,6 +120,17 @@ def markdown_to_html_node(markdown):
     top_div = ParentNode("div", html_nodes)
     return top_div
 
+"""Convert str of inline Markdown to list of HTML nodes"""
+def text_to_htmlnodes(inline_markdown):
+    text_nodes = text_to_textnodes(inline_markdown)
+    html_nodes = []
+    # Convert each TextNode to an HTMLNode
+    for text_node in text_nodes:
+        text_html_node = text_node_to_html_node(text_node)
+        html_nodes.append(text_html_node)
+    
+    return html_nodes
+
 """Returns the title of the Markdown doc
 Title should be an H1 line at the start of the document, ex:
 
@@ -151,7 +146,7 @@ Other content comes after
 ```code()```
 
 => This is the Title
-# TODO: Put Markdown syntax into a clas/enum
+# TODO: Put Markdown syntax into a class/enum
 """
 def extract_title(markdown):
     markdown = markdown.strip()

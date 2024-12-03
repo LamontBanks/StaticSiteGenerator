@@ -3,6 +3,15 @@ import shutil
 import pathlib
 from markdown_to_html_node import *
 
+"""Converts all Markdown pages at `dir_path_content` to HTML, copies to `dest_dir_path`
+Formats HTML with template at `template_path`"""
+def generate_pages_recursively(dir_path_content, template_path, dest_dir_path):
+    all_content_files = directory_file_names(dir_path_content)
+    md_file_paths = list(filter(lambda file: file.endswith('.md'), all_content_files))
+
+    for md_file_path in md_file_paths:
+        generate_page(md_file_path, template_path, dest_dir_path)
+
 """Copies all files and directories from the `source_dir` to the `dest_dir`
 Creates the dest_dir if it does not exist and deletes all content within
 """
@@ -61,15 +70,6 @@ def directory_file_names(dir):
 
     return file_paths
 
-"""Converts all Markdown pages at `dir_path_content` to HTML, copies to `dest_dir_path`
-Formats HTML with template at `template_path`"""
-def generate_pages_recursively(dir_path_content, template_path, dest_dir_path):
-    all_content_files = directory_file_names(dir_path_content)
-    md_file_paths = list(filter(lambda file: file.endswith('.md'), all_content_files))
-
-    for md_file_path in md_file_paths:
-        generate_page(md_file_path, template_path, dest_dir_path)
-
 """Converts the Markdown page located at from_path and generates an HTML page at dest_path
 Formats using the HTML template at template_path"""
 def generate_page(from_path, template_path, dest_path):
@@ -83,12 +83,11 @@ def generate_page(from_path, template_path, dest_path):
     # Create the HTML file: Split the extension off the end, add the HTML extension
     html_file_name = os.path.basename(from_path).rsplit(os.path.extsep, maxsplit=1)[0] + ".html"
 
-    # Replace the content
+    # Fill in the HTML page
     html_page = template.replace('{{ Title }}', title).replace('{{ Content }}', markdown_html)
-
     
-    # Extract path w/o the original top-level dir (i.e. "static") or the file name
-    # ex: "static/file/path/image.png" => "file/path/"
+    # Extract path w/o the original top-level dir (i.e. "content") or the file name
+    # ex: "static/file/path/index.md" => "file/path/"
     dirs_only = from_path.split(os.sep)
     intermediate_dirs = os.path.sep.join(dirs_only[1:-1])
     final_dest_path = os.path.join(intermediate_dirs, html_file_name)
@@ -96,7 +95,6 @@ def generate_page(from_path, template_path, dest_path):
     # Write the file
     print(f"Creating {html_file_name} in {os.path.join(dest_path, final_dest_path)}")
     write_file_text(html_page, os.path.join(dest_path, final_dest_path))
- 
 
 def read_file_text(path):
     text = ""
